@@ -1,0 +1,1 @@
+# Arabic-Synthetic-Text-Generator

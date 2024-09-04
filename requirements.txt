@@ -1,4 +1,2 @@
-flask==2.3.2
-flask-ngrok==0.0.25
-cohere==4.8.0
-python-dotenv==1.0.0
+Flask==2.3.2
+cohere==4.10.0

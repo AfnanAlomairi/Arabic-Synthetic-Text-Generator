@@ -1,15 +1,14 @@
 import os
 import cohere
-from flask import Flask, request, render_template
-from interface import template  # Import the template from the interface module
+from flask import Flask, request, render_template, send_file
 
-#Cohere client
+
 cohere_api_key = os.getenv("COHERE_API_KEY")
 cohere_client = cohere.Client(cohere_api_key)
 
 app = Flask(__name__)
 
-def generate_arabic_text(field, complexity, topic, number, length):
+def generate_arabic_text(field, complexity, topic, number, length, save_to_file=False):
     length_mapping = {
         'short': 'A brief overview',
         'medium': 'A detailed explanation',
@@ -24,8 +23,6 @@ def generate_arabic_text(field, complexity, topic, number, length):
         f"اكتب فقرة شاملة باللغة العربية حول الموضوع أعلاه."
     )
 
-    print(f"Generated Prompt: {prompt}")
-
     try:
         response = cohere_client.generate(
             model='command',
@@ -36,13 +33,18 @@ def generate_arabic_text(field, complexity, topic, number, length):
         )
         texts = [generation.text for generation in response.generations]
 
-        print(f"API Response: {response}")
+        if save_to_file:
+            filename = f"{topic.replace(' ', '_')}_generated_texts.txt"
+            with open(filename, 'w', encoding='utf-8') as file:
+                for text in texts:
+                    file.write(text + "\n\n")
+            return texts, filename
 
-        return texts
+        return texts, None
 
     except Exception as e:
         print(f"An error occurred: {e}")
-        return None
+        return None, None
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -52,19 +54,16 @@ def index():
         topic = request.form.get('topic')
         number = int(request.form.get('number'))
         length = request.form.get('length')
+        save = request.form.get('save') == 'on'
 
-        print(f"Field: {field}")
-        print(f"Complexity: {complexity}")
-        print(f"Topic: {topic}")
-        print(f"Number: {number}")
-        print(f"Length: {length}")
+        generated_texts, filename = generate_arabic_text(field, complexity, topic, number, length, save_to_file=save)
 
-        generated_texts = generate_arabic_text(field, complexity, topic, number, length)
-        print(f"Generated Texts: {generated_texts}")
-        return render_template("index.html", texts=generated_texts)
+        if filename:
+            return send_file(filename, as_attachment=True)
 
-    return render_template("index.html", texts=None)
+        return render_template('index.html', texts=generated_texts)
+
+    return render_template('index.html', texts=None)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)
-

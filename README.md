@@ -8,3 +8,12 @@
 - **Topic**: Input a specific topic for the text generation.
 - **Length**: Select between short, medium, and long paragraphs.
 - **Number of Outputs:** Specify how many paragraphs to generate.
+
+- ## Prerequisites
+- A [Cohere API key](https://cohere.ai) to generate text.
+
+- 1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/AfnanAlomairi/Arabic-Synthetic-Text-Generator.git
+   cd Arabic-Synthetic-Text-Generator
+

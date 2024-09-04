@@ -4,7 +4,7 @@
 
 ## Features
 - **Field**: Define the field of the generated text.
-- **Complexity Levels**: Choose between beginner, intermediate, and advanced levels.
-- **Topic Selection**: Input a specific topic for the text generation.
-- **Length Options**: Select between short, medium, and long paragraphs.
-- **Number**: Define the number of paragraphs.
+- **Complexity**: Choose the complexity level (beginner, intermediate, and advanced).
+- **Topic**: Input a specific topic for the text generation.
+- **Length**: Select between short, medium, and long paragraphs.
+- **Number of Outputs:** Specify how many paragraphs to generate.
